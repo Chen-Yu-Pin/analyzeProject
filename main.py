@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import os
 class script:
     '''欲查詢文字'''
     text = "" 
@@ -53,10 +54,10 @@ class script:
     def __init__(self,keyword):
     
         self.options = webdriver.ChromeOptions()
-
+        self.options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-        self.driver = webdriver.Chrome(chrome_options=self.options)
+        self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),chrome_options=self.options)
         self.driver.get("https://www.ptt.cc/bbs/index.html")
         self.text = keyword
         btn = self.driver.find_element(By.CLASS_NAME, "board")
