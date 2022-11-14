@@ -56,6 +56,9 @@ class script:
         self.options = webdriver.ChromeOptions()
         self.options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        self.options.add_argument("--headless")
+        self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--no-sandbox")
 
         self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),chrome_options=self.options)
         self.driver.get("https://www.ptt.cc/bbs/index.html")
