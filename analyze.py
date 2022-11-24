@@ -1,6 +1,6 @@
 import jieba
 import jieba.analyse
-from main import script
+from yobo import script
 from wordcloud import WordCloud
 import os
 
@@ -19,6 +19,10 @@ class funshii:
         tags = []
         tag_count = []
         jieba.add_word('便當')
+        jieba.add_word('抗中保台')
+        jieba.add_word("辦公室")
+        jieba.add_word("汙辱性極強")
+        jieba.add_word("民進黨")
         jieba.analyse.set_stop_words(os.getcwd()+"/stop.txt")
         tags = jieba.analyse.extract_tags(self.text, topK=10) 
         print(tags)

@@ -54,13 +54,10 @@ class script:
     def __init__(self,keyword):
     
         self.options = webdriver.ChromeOptions()
-        self.options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.options.add_argument("--headless")
-        self.options.add_argument("--disable-dev-shm-usage")
-        self.options.add_argument("--no-sandbox")
+        
 
-        self.driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),chrome_options=self.options)
+        self.driver = webdriver.Chrome(chrome_options=self.options)
         self.driver.get("https://www.ptt.cc/bbs/index.html")
         self.text = keyword
         btn = self.driver.find_element(By.CLASS_NAME, "board")
@@ -80,15 +77,22 @@ class script:
         articleLabel1 = [] #存推-噓不等於數字
         articleLabel2 = [] #存推-噓等於數字
         cnt = 0
-        while cnt<19:
+        while cnt<9:
             nextPage = self.driver.find_element(By.XPATH, "//div[@class='action-bar']/div[2]/a[2]")
             GP = self.driver.find_elements(By.CLASS_NAME, "nrec")
-            links = self.driver.find_elements(By.XPATH, "//div[@class = 'title']/a")
+            links = self.driver.find_elements(By.XPATH, "//div[@class = 'title']")
+            linksHref = []
+            for i in range(len(links)):
+                if links[i].get_attribute("innerHTML").find("a href") != -1:
+                    linksHref.append(links[i].find_element(By.TAG_NAME, "a").get_attribute("href"))
+                else:
+                    linksHref.append("")
+
             for i in range(len(GP)):
                 if GP[i].text == "爆" or GP[i].text.find("X") == 0 or GP[i].text == "":
-                    articleLabel1.append([GP[i].text,  links[i].get_attribute("href")])
+                    articleLabel1.append([GP[i].text,  linksHref[i]])
                 else:
-                    articleLabel2.append([int(GP[i].text),  links[i].get_attribute("href")])
+                    articleLabel2.append([int(GP[i].text),  linksHref[i]])
             if nextPage.get_attribute("class") != "btn wide disabled": #沒有下一頁
                 nextPage.click()
                 cnt +=1
@@ -106,23 +110,23 @@ class script:
 
         indexNum = 0
         i = 0
-        # while i < 5:
+        while i < 1:
         # ↓推-噓沒有X也不是空白的文章才抓
-        if articleLabel[indexNum][0].find("X") == -1 and articleLabel[indexNum][0] != "": 
-            self.driver.get(articleLabel[indexNum][1])
-            self.link = self.get_link()
-            self.title = self.get_title()
-            self.date = self.get_time()
-            articleText = self.get_article_text()
-            comment = self.get_comment()
-            self.outputString += articleText
-            for j in range(len(comment)):
-                self.outputString += comment[j]
-            # print(outputString)
-            indexNum += 1 #狗幹python for
-            i += 1 #狗幹python for
-        else:
-            indexNum += 1 #狗幹python for
+            if articleLabel[indexNum][0].find("X") == -1 and articleLabel[indexNum][0] != "": 
+                self.driver.get(articleLabel[indexNum][1])
+                self.link = self.get_link()
+                self.title = self.get_title()
+                self.date = self.get_time()
+                articleText = self.get_article_text()
+                comment = self.get_comment()
+                self.outputString += articleText
+                for j in range(len(comment)):
+                    self.outputString += comment[j]
+                # print(outputString)
+                indexNum += 1 #狗幹python for
+                i += 1 #狗幹python for
+            else:
+                indexNum += 1 #狗幹python for
         self.driver.close() #這是關瀏覽器
 
         # #標題 網址 內文 留言
