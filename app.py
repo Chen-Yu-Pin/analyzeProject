@@ -64,4 +64,4 @@ def photo():
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False
     port = int(os.environ.get("PORT", 5000))
-    app.run(ip='0.0.0.0',port=port)
+    app.run(host='0.0.0.0',port=port)
