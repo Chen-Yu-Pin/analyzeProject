@@ -11,7 +11,7 @@ CORS(app)
 pool = redis.ConnectionPool(host='redis-10516.c299.asia-northeast1-1.gce.cloud.redislabs.com',password='9slS8BIAJWQ7C51q0Te4qt22wZwO1UYn', port=10516, db=0)
 localpool = redis.ConnectionPool(host="localhost",port=6380,db=0)
 r = redis.Redis(connection_pool=pool,decode_responses=True,charset='UTF-8',encoding='UTF-8')
-photoUrl = "https://1405-2001-b011-a005-1cee-9465-602e-e36b-2daf.ngrok.io/photo?keyword="
+photoUrl = "https://funshii.zeabur.app/photo?keyword="
 print(r.ping())
 
 @app.route('/')
@@ -63,4 +63,5 @@ def photo():
     return send_file(file)
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(port=port)
